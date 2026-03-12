@@ -1,0 +1,11 @@
+{
+  "platforms": {
+    "android": {
+      "packageName": "com.nanofuxion.tamericons",
+      "sourceDir": "android",
+      "elements": {
+        "icon": "com.nanofuxion.tamericons.IconElement"
+      }
+    }
+  }
+}

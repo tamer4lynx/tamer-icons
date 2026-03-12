@@ -1,0 +1,43 @@
+{
+  "name": "tamer-icons",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Icon fonts for Lynx: Material Icons, Font Awesome. Tfont, GoogleIcons, FontAwesome components.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./tamer.config": {
+      "types": "./dist/tamer.config.d.ts",
+      "import": "./dist/tamer.config.js",
+      "default": "./dist/tamer.config.js"
+    }
+  },
+  "files": ["dist", "src", "fonts"],
+  "peerDependencies": {
+    "@lynx-js/react": ">=0.100.0",
+    "react": "^17.0.0"
+  },
+  "scripts": {
+    "fetch-fonts": "node scripts/fetch-fonts.mjs",
+    "build": "npm run fetch-fonts && npm run copy-android-fonts && tsc && cp src/fonts.css dist/",
+    "copy-android-fonts": "mkdir -p android/src/main/assets/fonts && cp fonts/*.ttf android/src/main/assets/fonts/ 2>/dev/null || true",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "@lynx-js/react": "^0.112.1",
+    "@lynx-js/types": "3.3.0",
+    "@types/react": "^17.0.0",
+    "react": "^17.0.2",
+    "typescript": "~5.8.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "Nanofuxion",
+  "license": "MIT"
+}
