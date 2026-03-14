@@ -45,7 +45,7 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
         return try {
             val assetPath = when (iconSet) {
                 "fontawesome", "fa" -> "fonts/fa-solid-900.ttf"
-                else -> "fonts/MaterialIcons-Regular.ttf"
+                else -> "fonts/MaterialSymbolsOutlined.ttf"
             }
             Typeface.createFromAsset(lynxContext.context.assets, assetPath)
         } catch (e: Exception) {
@@ -53,25 +53,32 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
         }
     }
 
-    private fun resolveCodepoint(): Char {
-        val map = when (iconSet) {
-            "fontawesome", "fa" -> IconCodepoints.FONTAWESOME
-            else -> IconCodepoints.MATERIAL
+    private fun resolveCodepoint(): Int {
+        return when (iconSet) {
+            "fontawesome", "fa" -> {
+                val key = iconName.removePrefix("fa-").replace("_", "-")
+                (IconCodepoints.FONTAWESOME[key] ?: IconCodepoints.FONTAWESOME[iconName])?.code ?: 0
+            }
+            else -> {
+                val map = IconCodepoints.getMaterial(lynxContext.context.assets)
+                map[iconName]
+                    ?: map[iconName.replace("_", "-")]
+                    ?: map[iconName.replace("-", "_")]
+                    ?: 0
+            }
         }
-        val key = iconName.removePrefix("fa-").replace("_", "-")
-        return map[key] ?: map[iconName] ?: '\u0000'
     }
 
     private fun applyIcon() {
         if (!::imageView.isInitialized) return
         val typeface = getTypeface() ?: return
-        val char = resolveCodepoint()
+        val codepoint = resolveCodepoint()
         val sizePx = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_SP,
             iconSizeSp,
             imageView.context.resources.displayMetrics
         ).toInt().coerceAtLeast(1)
-        val drawable = IconDrawable(typeface, char, iconColor, sizePx)
+        val drawable = IconDrawable(typeface, codepoint, iconColor, sizePx)
         imageView.setImageDrawable(drawable)
         imageView.clearColorFilter()
     }

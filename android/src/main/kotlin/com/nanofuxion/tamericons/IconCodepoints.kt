@@ -1,28 +1,9 @@
 package com.nanofuxion.tamericons
 
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
 object IconCodepoints {
-    val MATERIAL: Map<String, Char> = mapOf(
-        "search" to '\ue8b6',
-        "home" to '\ue88a',
-        "menu" to '\ue5d2',
-        "arrow_back" to '\ue5c4',
-        "arrow_back_ios" to '\ue5e0',
-        "add" to '\ue145',
-        "close" to '\ue5cd',
-        "chevron_left" to '\ue5cb',
-        "chevron_right" to '\ue5cc',
-        "more_vert" to '\ue5d4',
-        "settings" to '\ue8b8',
-        "person" to '\ue7fd',
-        "favorite" to '\ue87d',
-        "share" to '\ue80d',
-        "delete" to '\ue872',
-        "edit" to '\ue3c9',
-        "check" to '\ue5ca',
-        "info" to '\ue88e',
-        "warning" to '\ue002',
-        "error" to '\ue000',
-    )
 
     val FONTAWESOME: Map<String, Char> = mapOf(
         "search" to '\uf002',
@@ -44,4 +25,36 @@ object IconCodepoints {
         "exclamation-triangle" to '\uf071',
         "circle-xmark" to '\uf057',
     )
+
+    @Volatile
+    private var materialCache: Map<String, Int>? = null
+
+    fun getMaterial(assets: android.content.res.AssetManager): Map<String, Int> {
+        return materialCache ?: synchronized(this) {
+            materialCache ?: loadMaterialFromAssets(assets).also { materialCache = it }
+        }
+    }
+
+    private fun loadMaterialFromAssets(assets: android.content.res.AssetManager): Map<String, Int> {
+        return try {
+            assets.open("fonts/material-codepoints.txt").use { stream ->
+                BufferedReader(InputStreamReader(stream)).use { reader ->
+                    buildMap {
+                        reader.lineSequence().forEach { line ->
+                            val space = line.indexOf(' ')
+                            if (space > 0) {
+                                val name = line.substring(0, space)
+                                val hex = line.substring(space + 1).trim()
+                                if (hex.all { it in '0'..'9' || it in 'a'..'f' || it in 'A'..'F' }) {
+                                    put(name, hex.toInt(16))
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emptyMap()
+        }
+    }
 }

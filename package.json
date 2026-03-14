@@ -24,7 +24,7 @@
   },
   "scripts": {
     "fetch-fonts": "node scripts/fetch-fonts.mjs",
-    "build": "npm run fetch-fonts && npm run copy-android-fonts && tsc && cp src/fonts.css dist/",
+    "build": "npm run fetch-fonts && node scripts/generate-codepoints.mjs && npm run copy-android-fonts && tsc && cp src/fonts.css dist/",
     "copy-android-fonts": "mkdir -p android/src/main/assets/fonts && cp fonts/*.ttf android/src/main/assets/fonts/ 2>/dev/null || true",
     "prepare": "npm run build"
   },

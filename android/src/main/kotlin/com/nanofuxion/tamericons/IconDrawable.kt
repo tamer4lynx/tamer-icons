@@ -15,7 +15,7 @@ import android.graphics.Typeface
  */
 class IconDrawable(
     private val typeface: Typeface,
-    private val character: Char,
+    private val codepoint: Int,
     color: Int,
     private val sizePx: Int
 ) : Drawable() {
@@ -31,6 +31,10 @@ class IconDrawable(
     private val path = Path()
     private val pathBounds = RectF()
 
+    private val charSequence: CharSequence
+        get() = if (codepoint <= 0xFFFF) Character.toString(codepoint.toChar())
+        else String(Character.toChars(codepoint))
+
     init {
         setBounds(0, 0, sizePx, sizePx)
     }
@@ -43,16 +47,17 @@ class IconDrawable(
     }
 
     override fun draw(canvas: Canvas) {
-        if (character == '\u0000') return
+        if (codepoint == 0) return
         paint.color = colorList.getColorForState(state, colorList.defaultColor)
         paint.colorFilter = null
         val b = bounds
         if (b.width() <= 0 || b.height() <= 0) return
 
+        val seq = charSequence
         path.reset()
         var textSize = b.height().toFloat()
         paint.textSize = textSize
-        paint.getTextPath(character.toString(), 0, 1, 0f, 0f, path)
+        paint.getTextPath(seq.toString(), 0, seq.length, 0f, 0f, path)
         path.computeBounds(pathBounds, true)
 
         val pathW = pathBounds.width().coerceAtLeast(1f)
@@ -63,7 +68,7 @@ class IconDrawable(
         textSize *= scale
         paint.textSize = textSize
         path.reset()
-        paint.getTextPath(character.toString(), 0, 1, 0f, 0f, path)
+        paint.getTextPath(seq.toString(), 0, seq.length, 0f, 0f, path)
         path.computeBounds(pathBounds, true)
 
         val offsetX = b.left + (b.width() - pathBounds.width()) / 2 - pathBounds.left

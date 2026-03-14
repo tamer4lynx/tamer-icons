@@ -17,12 +17,12 @@ async function ensureFonts(pkgDir: string): Promise<void> {
   const fontsDir = path.join(pkgDir, 'fonts')
   fs.mkdirSync(fontsDir, { recursive: true })
 
-  const materialPath = path.join(fontsDir, 'MaterialIcons-Regular.ttf')
+  const materialPath = path.join(fontsDir, 'MaterialSymbolsOutlined.ttf')
   const faPath = path.join(fontsDir, 'fa-solid-900.ttf')
 
   const cacheDir = path.join(pkgDir, '.cache', 'tamer-icons')
   fs.mkdirSync(cacheDir, { recursive: true })
-  const materialCache = path.join(cacheDir, 'MaterialIcons-Regular.ttf')
+  const materialCache = path.join(cacheDir, 'MaterialSymbolsOutlined.ttf')
   const faCache = path.join(cacheDir, 'fa-solid-900.ttf')
 
   if (!fs.existsSync(materialCache)) {
