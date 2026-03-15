@@ -3,6 +3,7 @@ package com.nanofuxion.tamericons
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.util.Log
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -23,6 +24,7 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
     private lateinit var imageView: ImageView
 
     override fun createView(context: Context): FrameLayout {
+        Log.d("TamerIcon", "createView called")
         val container = FrameLayout(context).apply {
             clipChildren = false
             clipToPadding = false
@@ -71,8 +73,15 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
 
     private fun applyIcon() {
         if (!::imageView.isInitialized) return
-        val typeface = getTypeface() ?: return
+        val typeface = getTypeface()
+        if (typeface == null) {
+            Log.w("TamerIcon", "typeface null for set=$iconSet icon=$iconName")
+            return
+        }
         val codepoint = resolveCodepoint()
+        if (codepoint == 0) {
+            Log.w("TamerIcon", "codepoint=0 for icon=$iconName set=$iconSet")
+        }
         val sizePx = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_SP,
             iconSizeSp,

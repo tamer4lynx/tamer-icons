@@ -6,6 +6,12 @@
       "elements": {
         "icon": "com.nanofuxion.tamericons.IconElement"
       }
+    },
+    "ios": {
+      "podspecPath": "ios/tamericons",
+      "elements": {
+        "icon": "TamerIconElement"
+      }
     }
   }
 }

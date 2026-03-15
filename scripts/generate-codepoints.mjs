@@ -5,11 +5,12 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const pkgDir = path.resolve(__dirname, '..')
+const MATERIAL_SYMBOLS_VERSION = '2026-03-14'
 const codepointsUrl =
   'https://raw.githubusercontent.com/google/material-design-icons/refs/heads/master/variablefont/MaterialSymbolsOutlined%5BFILL%2CGRAD%2Copsz%2Cwght%5D.codepoints'
 
 async function fetchCodepoints() {
-  const cachePath = path.join(pkgDir, '.cache', 'material-codepoints.txt')
+  const cachePath = path.join(pkgDir, '.cache', 'tamer-icons', MATERIAL_SYMBOLS_VERSION, 'material-codepoints.txt')
   const cacheDir = path.dirname(cachePath)
   if (fs.existsSync(cachePath)) {
     return fs.readFileSync(cachePath, 'utf8')

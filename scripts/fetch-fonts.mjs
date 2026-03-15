@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const pkgDir = path.resolve(__dirname, '..')
 const fontsDir = path.join(pkgDir, 'fonts')
+const MATERIAL_SYMBOLS_VERSION = '2026-03-14'
 
 const MATERIAL_SYMBOLS_URL =
   'https://github.com/google/material-design-icons/raw/refs/heads/master/variablefont/MaterialSymbolsOutlined%5BFILL%2CGRAD%2Copsz%2Cwght%5D.ttf'
@@ -27,7 +28,7 @@ async function fetchWithCache(url, destPath, cachePath) {
   fs.copyFileSync(cachePath, destPath)
 }
 
-const cacheDir = path.join(pkgDir, '.cache', 'tamer-icons')
+const cacheDir = path.join(pkgDir, '.cache', 'tamer-icons', MATERIAL_SYMBOLS_VERSION)
 fs.mkdirSync(fontsDir, { recursive: true })
 await fetchWithCache(
   MATERIAL_SYMBOLS_URL,
