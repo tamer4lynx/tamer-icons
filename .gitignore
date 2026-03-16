@@ -2,3 +2,5 @@ dist
 node_modules
 fonts
 .cache
+build
+android/build
