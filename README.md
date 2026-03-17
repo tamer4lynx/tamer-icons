@@ -5,7 +5,7 @@ Icon fonts for Lynx: Material Icons, Font Awesome. Tfont, Icon component.
 ## Installation
 
 ```bash
-npm install tamer-icons
+npm install @tamer4lynx/tamer-icons
 ```
 
 Add to your app's dependencies and run `t4l link`.
@@ -13,7 +13,7 @@ Add to your app's dependencies and run `t4l link`.
 ## Usage
 
 ```tsx
-import { Icon, Tfont, type IconSet } from 'tamer-icons'
+import { Icon, Tfont, type IconSet } from '@tamer4lynx/tamer-icons'
 
 // Material Icons (default)
 <Icon name="home" size={24} color="#333" />

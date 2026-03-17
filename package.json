@@ -1,6 +1,7 @@
 {
-  "name": "tamer-icons",
-  "version": "0.1.0",
+  "name": "@tamer4lynx/tamer-icons",
+  "publishConfig": { "access": "public", "tag": "prerelease" },
+  "version": "0.0.1",
   "type": "module",
   "description": "Icon fonts for Lynx: Material Icons, Font Awesome. Tfont, GoogleIcons, FontAwesome components.",
   "main": "dist/index.js",
@@ -17,7 +18,7 @@
       "default": "./dist/tamer.config.js"
     }
   },
-  "files": ["dist", "src", "fonts", "android", "ios", "lynx.ext.json"],
+  "files": ["dist", "fonts", "android/src", "android/build.gradle.kts", "ios", "lynx.ext.json"],
   "lynx": { "ext": "lynx.ext.json" },
   "peerDependencies": {
     "@lynx-js/react": ">=0.100.0",
@@ -39,6 +40,9 @@
   "engines": {
     "node": ">=18"
   },
+  "repository": { "type": "git", "url": "https://github.com/tamer4lynx/tamer-icons.git" },
+  "homepage": "https://github.com/tamer4lynx/tamer-icons#readme",
+  "bugs": { "url": "https://github.com/tamer4lynx/tamer-icons/issues" },
   "author": "Nanofuxion",
   "license": "MIT"
 }
