@@ -1,16 +1,16 @@
 {
   "name": "@tamer4lynx/tamer-icons",
   "publishConfig": { "access": "public", "tag": "prerelease" },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "description": "Icon fonts for Lynx: Material Icons, Font Awesome. Tfont, GoogleIcons, FontAwesome components.",
-  "main": "dist/index.js",
+  "main": "dist/index.jsx",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "import": "./dist/index.jsx",
+      "default": "./dist/index.jsx"
     },
     "./tamer.config": {
       "types": "./dist/tamer.config.d.ts",
@@ -26,7 +26,7 @@
   },
   "scripts": {
     "fetch-fonts": "node scripts/fetch-fonts.mjs",
-    "build": "npm run fetch-fonts && node scripts/generate-codepoints.mjs && npm run copy-android-fonts && tsc",
+    "build": "npm run fetch-fonts && node scripts/generate-codepoints.mjs && npm run copy-android-fonts && rm -rf dist && tsc",
     "copy-android-fonts": "mkdir -p android/src/main/assets/fonts && cp fonts/*.ttf android/src/main/assets/fonts/ 2>/dev/null || true",
     "prepare": "npm run build"
   },
