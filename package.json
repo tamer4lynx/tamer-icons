@@ -4,7 +4,7 @@
     "access": "public",
     "tag": "prerelease"
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "description": "Icon fonts for Lynx: Material Icons, Font Awesome. Tfont, GoogleIcons, FontAwesome components.",
   "main": "dist/index.jsx",
@@ -38,8 +38,9 @@
   },
   "scripts": {
     "fetch-fonts": "node scripts/fetch-fonts.mjs",
-    "build": "npm run fetch-fonts && node scripts/generate-codepoints.mjs && npm run copy-android-fonts && rm -rf dist && tsc",
+    "build": "npm run fetch-fonts && node scripts/generate-codepoints.mjs && npm run copy-android-fonts && npm run copy-ios-fonts && rm -rf dist && tsc",
     "copy-android-fonts": "mkdir -p android/src/main/assets/fonts && cp fonts/*.ttf android/src/main/assets/fonts/ 2>/dev/null || true",
+    "copy-ios-fonts": "mkdir -p ios/tamericons/tamericons/Resources && cp fonts/MaterialSymbolsOutlined.ttf fonts/fa-solid-900.ttf ios/tamericons/tamericons/Resources/",
     "prepare": "npm run build"
   },
   "devDependencies": {

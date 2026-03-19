@@ -4,3 +4,4 @@ fonts
 .cache
 build
 android/build
+ios/tamericons/tamericons/Resources/*.ttf
