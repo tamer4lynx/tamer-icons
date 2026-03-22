@@ -4,9 +4,9 @@
     "access": "public",
     "tag": "prerelease"
   },
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
-  "description": "Icon fonts for Lynx: Material Icons, Font Awesome. Tfont, GoogleIcons, FontAwesome components.",
+  "description": "Icon fonts for Lynx: Material Icons, Font Awesome. Native `<icon>` element typings and font URLs.",
   "main": "dist/index.jsx",
   "types": "dist/index.d.ts",
   "exports": {
@@ -19,6 +19,11 @@
       "types": "./dist/tamer.config.d.ts",
       "import": "./dist/tamer.config.js",
       "default": "./dist/tamer.config.js"
+    },
+    "./icon-jsx": {
+      "types": "./dist/icon-jsx.d.ts",
+      "import": "./dist/icon-jsx.js",
+      "default": "./dist/icon-jsx.js"
     }
   },
   "files": [
@@ -32,13 +37,17 @@
   "lynx": {
     "ext": "lynx.ext.json"
   },
+  "tamer": {
+    "ambientTypeExports": ["./icon-jsx"]
+  },
   "peerDependencies": {
     "@lynx-js/react": ">=0.100.0",
+    "@lynx-js/types": ">=3.3.0",
     "react": "^17.0.0"
   },
   "scripts": {
     "fetch-fonts": "node scripts/fetch-fonts.mjs",
-    "build": "npm run fetch-fonts && node scripts/generate-codepoints.mjs && npm run copy-android-fonts && npm run copy-ios-fonts && rm -rf dist && tsc",
+    "build": "npm run fetch-fonts && node scripts/generate-codepoints.mjs && npm run copy-android-fonts && npm run copy-ios-fonts && rm -rf dist && tsc && node ./scripts/patch-index-dts.mjs",
     "copy-android-fonts": "mkdir -p android/src/main/assets/fonts && cp fonts/*.ttf android/src/main/assets/fonts/ 2>/dev/null || true",
     "copy-ios-fonts": "mkdir -p ios/tamericons/tamericons/Resources && cp fonts/MaterialSymbolsOutlined.ttf fonts/fa-solid-900.ttf ios/tamericons/tamericons/Resources/",
     "prepare": "npm run build"

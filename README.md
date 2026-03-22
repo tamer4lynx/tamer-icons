@@ -1,6 +1,6 @@
 # tamer-icons
 
-Icon fonts for Lynx: Material Icons, Font Awesome. Tfont, Icon component.
+Icon fonts for Lynx: Material Icons, Font Awesome. Provides TypeScript typings for the native `<icon>` element, font URLs, and codepoint data.
 
 ## Installation
 
@@ -12,29 +12,36 @@ Add to your app's dependencies and run `t4l link`.
 
 ## Usage
 
+Import the package once so JSX knows the `<icon>` intrinsic (or rely on `.tamer/tamer-components.d.ts` from `t4l init` / `t4l link`):
+
 ```tsx
-import { Icon, Tfont, type IconSet } from '@tamer4lynx/tamer-icons'
+import '@tamer4lynx/tamer-icons'
 
-// Material Icons (default)
-<Icon name="home" size={24} color="#333" />
+<icon
+  icon="home"
+  set="material"
+  size={24}
+  iconColor="#333"
+  style={{ width: '24px', height: '24px' }}
+/>
 
-// Font Awesome
-<Icon name="fa-home" set="fontawesome" size={24} />
-
-// Custom icon font (register via Tfont)
-<Tfont src="https://..." family="MyIcons" />
-<Icon name="custom-icon" set="material" size={32} />
+<icon icon="fa-home" set="fontawesome" size={24} iconColor="#333" style={{ width: '24px', height: '24px' }} />
 ```
 
-## API
+| Attribute | Description |
+|-----------|-------------|
+| `icon` | Icon name / codepoint key |
+| `set` | `'material'` \| `'fontawesome'` \| `'fa'` |
+| `size` | Number (optional; pair with `style` width/height as needed) |
+| `iconColor` | Color string |
+| `style` | Lynx `ViewProps` style (e.g. width/height) |
 
-| Component | Props | Description |
-|-----------|-------|-------------|
-| `Icon` | `name`, `set?`, `size?`, `color?`, `style?` | Renders icon. `set`: `'material'` \| `'fontawesome'` \| `'fa'` |
-| `Tfont` | `src`, `family`, `weight?`, `style?` | Registers custom icon font |
+## Exports
 
 | Export | Description |
 |--------|-------------|
+| `IconElementProps` | Props type for `<icon>` |
+| `IconSet` | `'material'` \| `'fontawesome'` \| `'fa'` |
 | `MATERIAL_ICONS_URL` | Material Icons font URL |
 | `FONTAWESOME_SOLID_URL` | Font Awesome solid URL |
 | `MATERIAL_CODEPOINTS` | Material icon codepoint map |

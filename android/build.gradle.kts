@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -24,5 +25,6 @@ android {
 dependencies {
     compileOnly("org.lynxsdk.lynx:lynx:3.3.1")
     compileOnly("org.lynxsdk.lynx:lynx-jssdk:3.3.1")
+    kapt("org.lynxsdk.lynx:lynx-processor:3.3.1")
     implementation("androidx.core:core-ktx:1.10.1")
 }
