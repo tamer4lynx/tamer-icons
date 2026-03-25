@@ -4,7 +4,7 @@
     "access": "public",
     "tag": "prerelease"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "description": "Icon fonts for Lynx: Material Icons, Font Awesome. Native `<icon>` element typings and font URLs.",
   "main": "dist/index.jsx",
