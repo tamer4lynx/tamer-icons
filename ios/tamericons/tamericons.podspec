@@ -15,9 +15,11 @@ Pod::Spec.new do |s|
   s.public_header_files = 'tamericons/Classes/**/*.h'
   s.resource_bundles = {
     'tamericons' => [
+      'tamericons/Resources/MaterialIcons-Regular.ttf',
       'tamericons/Resources/MaterialSymbolsOutlined.ttf',
       'tamericons/Resources/fa-solid-900.ttf',
-      'tamericons/Resources/material-codepoints.txt'
+      'tamericons/Resources/material-icons-codepoints.txt',
+      'tamericons/Resources/material-symbols-codepoints.txt'
     ]
   }
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }

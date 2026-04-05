@@ -4,9 +4,11 @@
 #import <Lynx/LynxPropsProcessor.h>
 
 static UIColor *TamerIconParseColor(id value);
-static NSString *gMaterialFontName = nil;
+static NSString *gMaterialClassicFontName = nil;
+static NSString *gMaterialSymbolsFontName = nil;
 static NSString *gFontAwesomeFontName = nil;
-static NSDictionary<NSString *, NSString *> *gMaterialCodepoints = nil;
+static NSDictionary<NSString *, NSString *> *gClassicMaterialCodepoints = nil;
+static NSDictionary<NSString *, NSString *> *gMaterialSymbolsCodepoints = nil;
 
 @interface TamerIconHostView : UIView
 @property(nonatomic, strong) UILabel *label;
@@ -43,8 +45,9 @@ static NSDictionary<NSString *, NSString *> *gMaterialCodepoints = nil;
 @property(nonatomic, copy) NSString *iconName;
 @property(nonatomic, strong) UIColor *iconColor;
 @property(nonatomic, assign) CGFloat iconSize;
+/** Material Symbols FILL axis; < 0 means unset. */
+@property(nonatomic, assign) CGFloat symbolFill;
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *fontAwesomeCodepoints;
-@property(nonatomic, copy) NSString *materialFontName;
 @property(nonatomic, copy) NSString *fontAwesomeFontName;
 @end
 
@@ -57,6 +60,7 @@ static NSDictionary<NSString *, NSString *> *gMaterialCodepoints = nil;
     _iconName = @"";
     _iconColor = UIColor.blackColor;
     _iconSize = 24.0;
+    _symbolFill = -1.0;
     _fontAwesomeCodepoints = @{
       @"search": @"\uf002",
       @"home": @"\uf015",
@@ -77,7 +81,6 @@ static NSDictionary<NSString *, NSString *> *gMaterialCodepoints = nil;
       @"exclamation-triangle": @"\uf071",
       @"circle-xmark": @"\uf057"
     };
-    _materialFontName = @"Material Symbols Outlined";
     _fontAwesomeFontName = @"Font Awesome 6 Free-Solid";
   }
   return self;
@@ -94,8 +97,10 @@ static NSDictionary<NSString *, NSString *> *gMaterialCodepoints = nil;
 + (void)ensureCodepointsLoaded {
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    gMaterialCodepoints = [self loadMaterialCodepointsFromBundle];
-    NSLog(@"[TamerIcon] loaded %lu material codepoints", (unsigned long)gMaterialCodepoints.count);
+    gClassicMaterialCodepoints = [self loadCodepointsFromResource:@"material-icons-codepoints"];
+    gMaterialSymbolsCodepoints = [self loadCodepointsFromResource:@"material-symbols-codepoints"];
+    NSLog(@"[TamerIcon] classic %lu symbols %lu codepoints",
+          (unsigned long)gClassicMaterialCodepoints.count, (unsigned long)gMaterialSymbolsCodepoints.count);
   });
 }
 
@@ -105,11 +110,11 @@ static NSDictionary<NSString *, NSString *> *gMaterialCodepoints = nil;
   return url ? [NSBundle bundleWithURL:url] : classBundle;
 }
 
-+ (NSDictionary<NSString *, NSString *> *)loadMaterialCodepointsFromBundle {
++ (NSDictionary<NSString *, NSString *> *)loadCodepointsFromResource:(NSString *)baseName {
   NSBundle *bundle = [self tamerBundle];
-  NSURL *url = [bundle URLForResource:@"material-codepoints" withExtension:@"txt"];
+  NSURL *url = [bundle URLForResource:baseName withExtension:@"txt"];
   if (url == nil) {
-    NSLog(@"[TamerIcon] material-codepoints.txt not found in bundle");
+    NSLog(@"[TamerIcon] %@.txt not found in bundle", baseName);
     return @{};
   }
   NSString *content = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
@@ -161,6 +166,16 @@ LYNX_PROP_SETTER("size", setSizeProp, NSNumber *) {
   [self applyIcon];
 }
 
+LYNX_PROP_SETTER("fill", setFillProp, NSNumber *) {
+  if (value == nil) {
+    self.symbolFill = -1.0;
+  } else {
+    double v = value.doubleValue;
+    self.symbolFill = (v >= 0.0 && v <= 1.0) ? v : -1.0;
+  }
+  [self applyIcon];
+}
+
 - (void)applyIcon {
   if (![self.view isKindOfClass:[TamerIconHostView class]]) return;
 
@@ -170,14 +185,22 @@ LYNX_PROP_SETTER("size", setSizeProp, NSNumber *) {
   hostView.label.textColor = self.iconColor;
 
   BOOL isFA = [self.iconSet isEqualToString:@"fontawesome"] || [self.iconSet isEqualToString:@"fa"];
-  NSString *fontName = isFA ? self.fontAwesomeFontName : self.materialFontName;
-  UIFont *font = [UIFont fontWithName:fontName size:self.iconSize];
+  BOOL isSym = [self.iconSet isEqualToString:@"material_symbols"];
+  NSString *matName = isSym ? gMaterialSymbolsFontName : gMaterialClassicFontName;
+  NSString *fontName = isFA ? self.fontAwesomeFontName : matName;
+  UIFont *font = fontName.length > 0 ? [UIFont fontWithName:fontName size:self.iconSize] : nil;
 
-  if (font == nil && !isFA) {
+  if (font == nil && !isFA && isSym) {
     font = [UIFont fontWithName:@"MaterialSymbolsOutlined-Regular" size:self.iconSize];
   }
-  if (font == nil && !isFA) {
+  if (font == nil && !isFA && isSym) {
     font = [UIFont fontWithName:@"Material Symbols Outlined" size:self.iconSize];
+  }
+  if (font == nil && !isFA && !isSym) {
+    font = [UIFont fontWithName:@"Material Icons" size:self.iconSize];
+  }
+  if (font == nil && !isFA && !isSym) {
+    font = [UIFont fontWithName:@"MaterialIcons-Regular" size:self.iconSize];
   }
   if (font == nil && isFA) {
     font = [UIFont fontWithName:@"FontAwesome6Free-Solid" size:self.iconSize];
@@ -185,12 +208,24 @@ LYNX_PROP_SETTER("size", setSizeProp, NSNumber *) {
 
   if (font == nil) {
     [self registerFontsIfNeeded];
-    font = [UIFont fontWithName:self.materialFontName size:self.iconSize];
+    matName = isSym ? gMaterialSymbolsFontName : gMaterialClassicFontName;
+    font = matName.length > 0 ? [UIFont fontWithName:matName size:self.iconSize] : nil;
   }
 
   if (font == nil) {
     NSLog(@"[TamerIcon] ERR no font for icon='%@' set='%@'", self.iconName, self.iconSet);
     font = [UIFont systemFontOfSize:self.iconSize weight:UIFontWeightRegular];
+  }
+
+  if (isSym && self.symbolFill >= 0.0) {
+    uint32_t fillTag = ('F' << 24) | ('I' << 16) | ('L' << 8) | 'L';
+    double fillVal = self.symbolFill >= 0.5 ? 1.0 : 0.0;
+    NSDictionary *varDict = @{ @(fillTag): @(fillVal) };
+    UIFontDescriptor *desc = [font.fontDescriptor fontDescriptorByAddingAttributes:@{ (__bridge NSString *)kCTFontVariationAttribute: varDict }];
+    UIFont *varFont = [UIFont fontWithDescriptor:desc size:self.iconSize];
+    if (varFont != nil) {
+      font = varFont;
+    }
   }
 
   hostView.label.font = font;
@@ -208,7 +243,8 @@ LYNX_PROP_SETTER("size", setSizeProp, NSNumber *) {
   }
 
   NSString *name = self.iconName;
-  NSDictionary *codepoints = gMaterialCodepoints ?: @{};
+  BOOL isSym = [self.iconSet isEqualToString:@"material_symbols"];
+  NSDictionary *codepoints = (isSym ? gMaterialSymbolsCodepoints : gClassicMaterialCodepoints) ?: @{};
   NSString *result = codepoints[name];
   if (result == nil) {
     result = codepoints[[name stringByReplacingOccurrencesOfString:@"_" withString:@"-"]];
@@ -223,7 +259,7 @@ LYNX_PROP_SETTER("size", setSizeProp, NSNumber *) {
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     NSBundle *bundle = [self tamerBundle];
-    NSArray<NSString *> *resources = @[@"MaterialSymbolsOutlined", @"fa-solid-900"];
+    NSArray<NSString *> *resources = @[@"MaterialIcons-Regular", @"MaterialSymbolsOutlined", @"fa-solid-900"];
     for (NSString *resource in resources) {
       NSURL *url = [bundle URLForResource:resource withExtension:@"ttf"];
       if (url == nil) {
@@ -241,8 +277,10 @@ LYNX_PROP_SETTER("size", setSizeProp, NSNumber *) {
       NSString *postScriptName = (__bridge_transfer NSString *)CGFontCopyPostScriptName(fontRef);
       CGFontRelease(fontRef);
       if (postScriptName.length > 0 && [UIFont fontWithName:postScriptName size:24] != nil) {
-        if ([resource isEqualToString:@"MaterialSymbolsOutlined"]) {
-          gMaterialFontName = postScriptName;
+        if ([resource isEqualToString:@"MaterialIcons-Regular"]) {
+          gMaterialClassicFontName = postScriptName;
+        } else if ([resource isEqualToString:@"MaterialSymbolsOutlined"]) {
+          gMaterialSymbolsFontName = postScriptName;
         } else if ([resource isEqualToString:@"fa-solid-900"]) {
           gFontAwesomeFontName = postScriptName;
         }
@@ -254,7 +292,6 @@ LYNX_PROP_SETTER("size", setSizeProp, NSNumber *) {
 - (void)registerFontsIfNeeded {
   [TamerIconElement registerFonts];
   [TamerIconElement ensureCodepointsLoaded];
-  if (gMaterialFontName.length > 0) self.materialFontName = gMaterialFontName;
   if (gFontAwesomeFontName.length > 0) self.fontAwesomeFontName = gFontAwesomeFontName;
 }
 

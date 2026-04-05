@@ -5,6 +5,11 @@ export const MATERIAL_SYMBOLS_FAMILY = 'Material Symbols Outlined'
 export const MATERIAL_ICONS_URL = MATERIAL_SYMBOLS_URL
 export const MATERIAL_ICONS_FAMILY = MATERIAL_SYMBOLS_FAMILY
 
+/** Classic Material Design Icons (filled), distinct from variable Material Symbols. */
+export const MATERIAL_ICONS_CLASSIC_URL =
+  'https://raw.githubusercontent.com/google/material-design-icons/master/font/MaterialIcons-Regular.ttf'
+export const MATERIAL_ICONS_CLASSIC_FAMILY = 'Material Icons'
+
 export const FONTAWESOME_SOLID_URL =
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.ttf'
 export const FONTAWESOME_SOLID_FAMILY = 'Font Awesome 6 Free'

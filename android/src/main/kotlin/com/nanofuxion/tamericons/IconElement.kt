@@ -13,6 +13,7 @@ import com.lynx.react.bridge.ReadableType
 import com.lynx.tasm.behavior.LynxContext
 import com.lynx.tasm.behavior.LynxProp
 import com.lynx.tasm.behavior.ui.LynxUI
+import kotlin.math.roundToInt
 
 class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
 
@@ -20,6 +21,8 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
     private var iconName = ""
     private var iconColor = Color.BLACK
     private var iconSizeSp = 24f
+    /** Material Symbols FILL axis: 0 = outline, 1 = filled. Null = font default. */
+    private var symbolFill: Float? = null
 
     private lateinit var imageView: ImageView
 
@@ -47,7 +50,8 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
         return try {
             val assetPath = when (iconSet) {
                 "fontawesome", "fa" -> "fonts/fa-solid-900.ttf"
-                else -> "fonts/MaterialSymbolsOutlined.ttf"
+                "material_symbols" -> "fonts/MaterialSymbolsOutlined.ttf"
+                else -> "fonts/MaterialIcons-Regular.ttf"
             }
             Typeface.createFromAsset(lynxContext.context.assets, assetPath)
         } catch (e: Exception) {
@@ -61,8 +65,15 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
                 val key = iconName.removePrefix("fa-").replace("_", "-")
                 (IconCodepoints.FONTAWESOME[key] ?: IconCodepoints.FONTAWESOME[iconName])?.code ?: 0
             }
+            "material_symbols" -> {
+                val map = IconCodepoints.getMaterialSymbols(lynxContext.context.assets)
+                map[iconName]
+                    ?: map[iconName.replace("_", "-")]
+                    ?: map[iconName.replace("-", "_")]
+                    ?: 0
+            }
             else -> {
-                val map = IconCodepoints.getMaterial(lynxContext.context.assets)
+                val map = IconCodepoints.getMaterialClassic(lynxContext.context.assets)
                 map[iconName]
                     ?: map[iconName.replace("_", "-")]
                     ?: map[iconName.replace("-", "_")]
@@ -87,7 +98,13 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
             iconSizeSp,
             imageView.context.resources.displayMetrics
         ).toInt().coerceAtLeast(1)
-        val drawable = IconDrawable(typeface, codepoint, iconColor, sizePx)
+        val variation =
+            if (iconSet == "material_symbols" && symbolFill != null) {
+                "'FILL' ${symbolFill!!.roundToInt().coerceIn(0, 1)}"
+            } else {
+                null
+            }
+        val drawable = IconDrawable(typeface, codepoint, iconColor, sizePx, variation)
         imageView.setImageDrawable(drawable)
         imageView.clearColorFilter()
     }
@@ -138,6 +155,16 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
     @LynxProp(name = "size")
     fun setSize(value: Double) {
         iconSizeSp = value.toFloat()
+        applyIcon()
+    }
+
+    @LynxProp(name = "fill")
+    fun setFill(value: Dynamic) {
+        symbolFill = when (value.type) {
+            ReadableType.Null -> null
+            ReadableType.Number -> value.asDouble().toFloat().coerceIn(0f, 1f)
+            else -> null
+        }
         applyIcon()
     }
 

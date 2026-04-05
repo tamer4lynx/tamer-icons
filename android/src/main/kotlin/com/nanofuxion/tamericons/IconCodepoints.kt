@@ -27,17 +27,30 @@ object IconCodepoints {
     )
 
     @Volatile
-    private var materialCache: Map<String, Int>? = null
+    private var materialClassicCache: Map<String, Int>? = null
 
-    fun getMaterial(assets: android.content.res.AssetManager): Map<String, Int> {
-        return materialCache ?: synchronized(this) {
-            materialCache ?: loadMaterialFromAssets(assets).also { materialCache = it }
+    @Volatile
+    private var materialSymbolsCache: Map<String, Int>? = null
+
+    fun getMaterialClassic(assets: android.content.res.AssetManager): Map<String, Int> {
+        return materialClassicCache ?: synchronized(this) {
+            materialClassicCache ?: loadMaterialFromAssets(assets, "fonts/material-icons-codepoints.txt").also {
+                materialClassicCache = it
+            }
         }
     }
 
-    private fun loadMaterialFromAssets(assets: android.content.res.AssetManager): Map<String, Int> {
+    fun getMaterialSymbols(assets: android.content.res.AssetManager): Map<String, Int> {
+        return materialSymbolsCache ?: synchronized(this) {
+            materialSymbolsCache ?: loadMaterialFromAssets(assets, "fonts/material-symbols-codepoints.txt").also {
+                materialSymbolsCache = it
+            }
+        }
+    }
+
+    private fun loadMaterialFromAssets(assets: android.content.res.AssetManager, path: String): Map<String, Int> {
         return try {
-            assets.open("fonts/material-codepoints.txt").use { stream ->
+            assets.open(path).use { stream ->
                 BufferedReader(InputStreamReader(stream)).use { reader ->
                     buildMap {
                         reader.lineSequence().forEach { line ->
@@ -53,7 +66,7 @@ object IconCodepoints {
                     }
                 }
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             emptyMap()
         }
     }

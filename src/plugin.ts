@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import type { RsbuildPlugin } from '@rsbuild/core'
-import { MATERIAL_ICONS_URL, FONTAWESOME_SOLID_URL } from './fonts'
+import { MATERIAL_ICONS_URL, FONTAWESOME_SOLID_URL, MATERIAL_ICONS_CLASSIC_URL } from './fonts'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -18,11 +18,13 @@ async function ensureFonts(pkgDir: string): Promise<void> {
   fs.mkdirSync(fontsDir, { recursive: true })
 
   const materialPath = path.join(fontsDir, 'MaterialSymbolsOutlined.ttf')
+  const classicPath = path.join(fontsDir, 'MaterialIcons-Regular.ttf')
   const faPath = path.join(fontsDir, 'fa-solid-900.ttf')
 
   const cacheDir = path.join(pkgDir, '.cache', 'tamer-icons')
   fs.mkdirSync(cacheDir, { recursive: true })
   const materialCache = path.join(cacheDir, 'MaterialSymbolsOutlined.ttf')
+  const classicCache = path.join(cacheDir, 'MaterialIcons-Regular.ttf')
   const faCache = path.join(cacheDir, 'fa-solid-900.ttf')
 
   if (!fs.existsSync(materialCache)) {
@@ -30,6 +32,12 @@ async function ensureFonts(pkgDir: string): Promise<void> {
     fs.writeFileSync(materialCache, buf)
   }
   fs.copyFileSync(materialCache, materialPath)
+
+  if (!fs.existsSync(classicCache)) {
+    const buf = await fetchToBuffer(MATERIAL_ICONS_CLASSIC_URL)
+    fs.writeFileSync(classicCache, buf)
+  }
+  fs.copyFileSync(classicCache, classicPath)
 
   if (!fs.existsSync(faCache)) {
     const buf = await fetchToBuffer(FONTAWESOME_SOLID_URL)

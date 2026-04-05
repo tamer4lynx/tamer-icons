@@ -7,6 +7,7 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.graphics.Typeface
+import android.os.Build
 
 /**
  * Drawable that renders a single icon font character, scaled and centered in bounds.
@@ -17,7 +18,8 @@ class IconDrawable(
     private val typeface: Typeface,
     private val codepoint: Int,
     color: Int,
-    private val sizePx: Int
+    private val sizePx: Int,
+    private val fontVariationSettings: String? = null
 ) : Drawable() {
 
     private var colorList: ColorStateList = ColorStateList.valueOf(color)
@@ -50,6 +52,9 @@ class IconDrawable(
         if (codepoint == 0) return
         paint.color = colorList.getColorForState(state, colorList.defaultColor)
         paint.colorFilter = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            paint.fontVariationSettings = fontVariationSettings
+        }
         val b = bounds
         if (b.width() <= 0 || b.height() <= 0) return
 

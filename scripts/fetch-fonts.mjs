@@ -9,6 +9,8 @@ const MATERIAL_SYMBOLS_VERSION = '2026-03-14'
 
 const MATERIAL_SYMBOLS_URL =
   'https://github.com/google/material-design-icons/raw/refs/heads/master/variablefont/MaterialSymbolsOutlined%5BFILL%2CGRAD%2Copsz%2Cwght%5D.ttf'
+const MATERIAL_ICONS_CLASSIC_URL =
+  'https://raw.githubusercontent.com/google/material-design-icons/master/font/MaterialIcons-Regular.ttf'
 const FA_URL = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.ttf'
 
 async function fetchToBuffer(url) {
@@ -39,5 +41,11 @@ await fetchWithCache(
   FA_URL,
   path.join(fontsDir, 'fa-solid-900.ttf'),
   path.join(cacheDir, 'fa-solid-900.ttf')
+)
+const classicCacheDir = path.join(pkgDir, '.cache', 'tamer-icons', 'material-icons-classic')
+await fetchWithCache(
+  MATERIAL_ICONS_CLASSIC_URL,
+  path.join(fontsDir, 'MaterialIcons-Regular.ttf'),
+  path.join(classicCacheDir, 'MaterialIcons-Regular.ttf')
 )
 console.log('Fonts ready in', fontsDir)
