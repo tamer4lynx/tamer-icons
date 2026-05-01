@@ -472,12 +472,18 @@ battery_android_share f301
 battery_android_shield f300
 battery_change f7eb
 battery_charging_20 f0a2
+battery_charging_20_2 fff3e
 battery_charging_30 f0a3
+battery_charging_30_2 fff3d
 battery_charging_50 f0a4
+battery_charging_50_2 fff3c
 battery_charging_60 f0a5
+battery_charging_60_2 fff3b
 battery_charging_80 f0a6
+battery_charging_80_2 fff3a
 battery_charging_90 f0a7
 battery_charging_full e1a3
+battery_charging_full_2 fff39
 battery_error f7ea
 battery_full e1a5
 battery_full_alt f13b
@@ -518,6 +524,8 @@ blanket e828
 blender efe3
 blind f8d6
 blinds e286
+blinds_2 fff78
+blinds_2_closed fff79
 blinds_closed ec1f
 block f08c
 blood_pressure e097
@@ -539,6 +547,7 @@ boat_railway f36c
 body_fat e098
 body_system e099
 bolt ea0b
+bolt_boost fff6a
 bomb f568
 book e86e
 book_2 f53e
@@ -704,6 +713,7 @@ car_fan_mid_left f33b
 car_fan_mid_low_right f33a
 car_fan_mid_right f339
 car_fan_recirculate f338
+car_fan_recirculate_2 fff40
 car_gear f337
 car_lock f336
 car_mirror_heat f335
@@ -1479,7 +1489,6 @@ fit_page_height f397
 fit_page_width f396
 fit_screen ea10
 fit_width f779
-fitbit_raquetball fffc5
 fitness_center eb43
 fitness_tracker f463
 fitness_trackers eef1
@@ -1681,6 +1690,7 @@ games e30f
 garage f011
 garage_check f28d
 garage_door e714
+garage_door_open fff77
 garage_home e82d
 garage_money f28c
 garden_cart f8a9
@@ -2107,6 +2117,7 @@ license eb04
 lift_to_talk efa3
 light f02a
 light_group e28b
+light_group_2 fff76
 light_mode e518
 light_off e9b8
 lightbulb e90f
@@ -2114,6 +2125,7 @@ lightbulb_2 f3e3
 lightbulb_circle ebfe
 lightbulb_outline e90f
 lightning_stand efa4
+lightstrip fff75
 line_axis ea9a
 line_curve f757
 line_end f826
@@ -2142,6 +2154,7 @@ list e896
 list_alt e0ee
 list_alt_add f756
 list_alt_check f3de
+list_arrow fff33
 lists e9b9
 live_help e0c6
 live_tv e63a
@@ -2861,7 +2874,9 @@ pill_off f809
 pin f045
 pin_drop e55e
 pin_end e767
+pin_history fff2e
 pin_invoke e763
+pin_road fff2d
 pinboard f3ab
 pinboard_unread f3ac
 pinch eb38
@@ -3287,6 +3302,8 @@ settings_video_camera f621
 settings_voice e8c8
 settop_component e2ac
 severe_cold ebd3
+shades fff73
+shades_closed fff74
 shadow e9df
 shadow_add f584
 shadow_minus f583
@@ -3305,11 +3322,13 @@ shelf_auto_hide f703
 shelf_position f702
 shelves f86e
 shield e9e0
+shield_card fff30
 shield_lock f686
 shield_locked f592
 shield_moon eaa9
 shield_person f650
 shield_question f529
+shield_radar fff2f
 shield_toggle f2ad
 shield_watch f30f
 shield_with_heart e78f
@@ -3432,6 +3451,7 @@ sound_detection_dog_barking f149
 sound_detection_glass_break f14a
 sound_detection_loud_sound f14b
 sound_sampler f6b4
+soundbar fff72
 soup_kitchen e7d3
 source f1c8
 source_environment e527
@@ -3449,6 +3469,7 @@ spatial_audio_off ebe8
 spatial_speaker f4cf
 spatial_tracking ebea
 speaker e32d
+speaker_2 fff71
 speaker_group e32e
 speaker_notes e8cd
 speaker_notes_off e92a
@@ -3470,7 +3491,10 @@ speed_1_5 f4e0
 speed_1_5x f494
 speed_1_75 f4d1
 speed_1_7x f493
+speed_2 fff38
 speed_2x f4eb
+speed_3 fff37
+speed_4 fff36
 speed_camera f470
 spellcheck e8ce
 split_scene f3bf
@@ -3612,6 +3636,7 @@ subtitles_gear f355
 subtitles_off ef72
 subway e56f
 subway_walk f287
+subwoofer fff70
 summarize f071
 sunny e81a
 sunny_snowing e819
@@ -3653,6 +3678,7 @@ switch_access_shortcut_add e7e2
 switch_account e9ed
 switch_camera e41e
 switch_left f1d1
+switch_off fff6f
 switch_right f1d2
 switch_video e41f
 switches e733
@@ -3848,6 +3874,7 @@ tornado e199
 total_dissolved_solids f877
 touch_app e913
 touch_double f38b
+touch_double_2 fff35
 touch_long f38a
 touch_triple f389
 touchpad_mouse f687
@@ -3965,6 +3992,8 @@ usb_off e4fa
 user_attributes e708
 vaccines e138
 vacuum efc5
+vacuum_2 fff6d
+vacuum_2_on fff6e
 valve e224
 vape_free ebc6
 vaping_rooms ebcf
@@ -4152,6 +4181,7 @@ wifi_calling_bar_1 f44c
 wifi_calling_bar_2 f44b
 wifi_calling_bar_3 f44a
 wifi_channel eb6a
+wifi_device fff34
 wifi_find eb31
 wifi_home f671
 wifi_lock e1e1
