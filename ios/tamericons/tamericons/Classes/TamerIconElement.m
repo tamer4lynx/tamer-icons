@@ -7,6 +7,7 @@ static UIColor *TamerIconParseColor(id value);
 static NSString *gMaterialClassicFontName = nil;
 static NSString *gMaterialSymbolsFontName = nil;
 static NSString *gFontAwesomeFontName = nil;
+static NSString *gFontAwesomeBrandsFontName = nil;
 static NSDictionary<NSString *, NSString *> *gClassicMaterialCodepoints = nil;
 static NSDictionary<NSString *, NSString *> *gMaterialSymbolsCodepoints = nil;
 
@@ -49,6 +50,8 @@ static NSDictionary<NSString *, NSString *> *gMaterialSymbolsCodepoints = nil;
 @property(nonatomic, assign) CGFloat symbolFill;
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *fontAwesomeCodepoints;
 @property(nonatomic, copy) NSString *fontAwesomeFontName;
+@property(nonatomic, strong) NSDictionary<NSString *, NSString *> *fontAwesomeBrandsCodepoints;
+@property(nonatomic, copy) NSString *fontAwesomeBrandsFontName;
 @end
 
 @implementation TamerIconElement
@@ -79,9 +82,27 @@ static NSDictionary<NSString *, NSString *> *gMaterialSymbolsCodepoints = nil;
       @"check": @"\uf00c",
       @"info": @"\uf129",
       @"exclamation-triangle": @"\uf071",
-      @"circle-xmark": @"\uf057"
+      @"circle-xmark": @"\uf057",
+      @"envelope": @"\uf0e0",
+      @"envelope-open": @"\uf2b6",
+      @"link": @"\uf0c1",
+      @"globe": @"\uf0ac",
+      @"comment": @"\uf075"
     };
     _fontAwesomeFontName = @"Font Awesome 6 Free-Solid";
+    _fontAwesomeBrandsCodepoints = @{
+      @"github": @"",
+      @"discord": @"",
+      @"twitter": @"",
+      @"x-twitter": @"",
+      @"youtube": @"",
+      @"linkedin": @"",
+      @"npm": @"",
+      @"apple": @"",
+      @"android": @"",
+      @"google": @""
+    };
+    _fontAwesomeBrandsFontName = @"FontAwesome6Brands-Regular";
   }
   return self;
 }
@@ -185,9 +206,10 @@ LYNX_PROP_SETTER("fill", setFillProp, NSNumber *) {
   hostView.label.textColor = self.iconColor;
 
   BOOL isFA = [self.iconSet isEqualToString:@"fontawesome"] || [self.iconSet isEqualToString:@"fa"];
+  BOOL isFAB = [self.iconSet isEqualToString:@"fontawesome_brands"] || [self.iconSet isEqualToString:@"fab"];
   BOOL isSym = [self.iconSet isEqualToString:@"material_symbols"];
   NSString *matName = isSym ? gMaterialSymbolsFontName : gMaterialClassicFontName;
-  NSString *fontName = isFA ? self.fontAwesomeFontName : matName;
+  NSString *fontName = isFAB ? self.fontAwesomeBrandsFontName : (isFA ? self.fontAwesomeFontName : matName);
   UIFont *font = fontName.length > 0 ? [UIFont fontWithName:fontName size:self.iconSize] : nil;
 
   if (font == nil && !isFA && isSym) {
@@ -204,6 +226,9 @@ LYNX_PROP_SETTER("fill", setFillProp, NSNumber *) {
   }
   if (font == nil && isFA) {
     font = [UIFont fontWithName:@"FontAwesome6Free-Solid" size:self.iconSize];
+  }
+  if (font == nil && isFAB) {
+    font = [UIFont fontWithName:@"FontAwesome6Brands-Regular" size:self.iconSize];
   }
 
   if (font == nil) {
@@ -229,7 +254,7 @@ LYNX_PROP_SETTER("fill", setFillProp, NSNumber *) {
   }
 
   hostView.label.font = font;
-  hostView.label.adjustsFontSizeToFitWidth = isFA;
+  hostView.label.adjustsFontSizeToFitWidth = (isFA || isFAB);
   [hostView setNeedsLayout];
 }
 
@@ -240,6 +265,12 @@ LYNX_PROP_SETTER("fill", setFillProp, NSNumber *) {
     NSString *normalized = [[self.iconName stringByReplacingOccurrencesOfString:@"_" withString:@"-"] lowercaseString];
     NSString *trimmed = [normalized hasPrefix:@"fa-"] ? [normalized substringFromIndex:3] : normalized;
     return self.fontAwesomeCodepoints[trimmed] ?: self.fontAwesomeCodepoints[normalized] ?: @"";
+  }
+
+  if ([self.iconSet isEqualToString:@"fontawesome_brands"] || [self.iconSet isEqualToString:@"fab"]) {
+    NSString *normalized = [[self.iconName stringByReplacingOccurrencesOfString:@"_" withString:@"-"] lowercaseString];
+    NSString *trimmed = [normalized hasPrefix:@"fa-"] ? [normalized substringFromIndex:3] : normalized;
+    return self.fontAwesomeBrandsCodepoints[trimmed] ?: self.fontAwesomeBrandsCodepoints[normalized] ?: @"";
   }
 
   NSString *name = self.iconName;
@@ -259,7 +290,7 @@ LYNX_PROP_SETTER("fill", setFillProp, NSNumber *) {
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     NSBundle *bundle = [self tamerBundle];
-    NSArray<NSString *> *resources = @[@"MaterialIcons-Regular", @"MaterialSymbolsOutlined", @"fa-solid-900"];
+    NSArray<NSString *> *resources = @[@"MaterialIcons-Regular", @"MaterialSymbolsOutlined", @"fa-solid-900", @"fa-brands-400"];
     for (NSString *resource in resources) {
       NSURL *url = [bundle URLForResource:resource withExtension:@"ttf"];
       if (url == nil) {
@@ -283,6 +314,8 @@ LYNX_PROP_SETTER("fill", setFillProp, NSNumber *) {
           gMaterialSymbolsFontName = postScriptName;
         } else if ([resource isEqualToString:@"fa-solid-900"]) {
           gFontAwesomeFontName = postScriptName;
+        } else if ([resource isEqualToString:@"fa-brands-400"]) {
+          gFontAwesomeBrandsFontName = postScriptName;
         }
       }
     }
@@ -293,6 +326,7 @@ LYNX_PROP_SETTER("fill", setFillProp, NSNumber *) {
   [TamerIconElement registerFonts];
   [TamerIconElement ensureCodepointsLoaded];
   if (gFontAwesomeFontName.length > 0) self.fontAwesomeFontName = gFontAwesomeFontName;
+  if (gFontAwesomeBrandsFontName.length > 0) self.fontAwesomeBrandsFontName = gFontAwesomeBrandsFontName;
 }
 
 @end

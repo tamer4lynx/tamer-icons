@@ -13,3 +13,7 @@ export const MATERIAL_ICONS_CLASSIC_FAMILY = 'Material Icons'
 export const FONTAWESOME_SOLID_URL =
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.ttf'
 export const FONTAWESOME_SOLID_FAMILY = 'Font Awesome 6 Free'
+
+export const FONTAWESOME_BRANDS_URL =
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-brands-400.ttf'
+export const FONTAWESOME_BRANDS_FAMILY = 'Font Awesome 6 Brands'

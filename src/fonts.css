@@ -11,3 +11,10 @@
   font-weight: 900;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'Font Awesome 6 Brands';
+  src: url('../fonts/fa-brands-400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}

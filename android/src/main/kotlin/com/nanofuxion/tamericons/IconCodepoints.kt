@@ -24,6 +24,24 @@ object IconCodepoints {
         "info" to '\uf129',
         "exclamation-triangle" to '\uf071',
         "circle-xmark" to '\uf057',
+        "envelope" to '\uf0e0',
+        "envelope-open" to '\uf2b6',
+        "link" to '\uf0c1',
+        "globe" to '\uf0ac',
+        "comment" to '\uf075',
+    )
+
+    val FONTAWESOME_BRANDS: Map<String, Char> = mapOf(
+        "github" to '\uf09b',
+        "discord" to '\uf392',
+        "twitter" to '\uf099',
+        "x-twitter" to '\ue61b',
+        "youtube" to '\uf167',
+        "linkedin" to '\uf08c',
+        "npm" to '\uf3d4',
+        "apple" to '\uf179',
+        "android" to '\uf17b',
+        "google" to '\uf1a0',
     )
 
     @Volatile

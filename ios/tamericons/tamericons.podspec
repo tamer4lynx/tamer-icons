@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
       'tamericons/Resources/MaterialIcons-Regular.ttf',
       'tamericons/Resources/MaterialSymbolsOutlined.ttf',
       'tamericons/Resources/fa-solid-900.ttf',
+      'tamericons/Resources/fa-brands-400.ttf',
       'tamericons/Resources/material-icons-codepoints.txt',
       'tamericons/Resources/material-symbols-codepoints.txt'
     ]

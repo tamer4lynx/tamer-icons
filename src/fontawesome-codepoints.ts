@@ -17,4 +17,10 @@ export const FONTAWESOME_CODEPOINTS: Record<string, string> = {
   info: '\uf129',
   'exclamation-triangle': '\uf071',
   'circle-xmark': '\uf057',
+  envelope: '\uf0e0',
+  'envelope-open': '\uf2b6',
+  link: '\uf0c1',
+  globe: '\uf0ac',
+  comment: '\uf075',
+
 }

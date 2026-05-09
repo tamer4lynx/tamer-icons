@@ -50,6 +50,7 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
         return try {
             val assetPath = when (iconSet) {
                 "fontawesome", "fa" -> "fonts/fa-solid-900.ttf"
+                "fontawesome_brands", "fab" -> "fonts/fa-brands-400.ttf"
                 "material_symbols" -> "fonts/MaterialSymbolsOutlined.ttf"
                 else -> "fonts/MaterialIcons-Regular.ttf"
             }
@@ -64,6 +65,10 @@ class IconElement(context: LynxContext) : LynxUI<FrameLayout>(context) {
             "fontawesome", "fa" -> {
                 val key = iconName.removePrefix("fa-").replace("_", "-")
                 (IconCodepoints.FONTAWESOME[key] ?: IconCodepoints.FONTAWESOME[iconName])?.code ?: 0
+            }
+            "fontawesome_brands", "fab" -> {
+                val key = iconName.removePrefix("fa-").replace("_", "-")
+                (IconCodepoints.FONTAWESOME_BRANDS[key] ?: IconCodepoints.FONTAWESOME_BRANDS[iconName])?.code ?: 0
             }
             "material_symbols" -> {
                 val map = IconCodepoints.getMaterialSymbols(lynxContext.context.assets)
